@@ -16,6 +16,7 @@ NGX_LOCK_PATH=
 NGX_USER=
 NGX_GROUP=
 NGX_BUILD=
+NGX_SANITIZE=
 NGX_FUZZER=
 
 CC=${CC:-cc}
@@ -213,6 +214,7 @@ do
 $0: warning: the \"--with-ipv6\" option is deprecated"
         ;;
 
+        --with-sanitize=*)               NGX_SANITIZE="$value"      ;;
         --with-fuzzer)                   NGX_FUZZER=YES             ;;
 
         --without-http)                  HTTP=NO                    ;;
@@ -440,6 +442,7 @@ cat << END
 
   --with-file-aio                    enable file AIO support
 
+  --with-sanitize=SANITIZERS         enable compiler sanitizers
   --with-fuzzer                      enable fuzzing support
 
   --with-http_ssl_module             enable ngx_http_ssl_module
