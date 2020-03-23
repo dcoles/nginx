@@ -9,6 +9,9 @@
 #include <ngx_core.h>
 #include <nginx.h>
 
+#if (NGX_FUZZER)
+#include "ngx_fuzz_target.c"
+#endif
 
 static void ngx_show_version_info(void);
 static ngx_int_t ngx_add_inherited_sockets(ngx_cycle_t *cycle);
@@ -192,7 +195,11 @@ static char **ngx_os_environ;
 
 
 int ngx_cdecl
+#if (NGX_FUZZER)
+_main(int argc, char *const *argv)
+#else
 main(int argc, char *const *argv)
+#endif
 {
     ngx_buf_t        *b;
     ngx_log_t        *log;

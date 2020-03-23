@@ -169,6 +169,18 @@ END
 fi
 
 
+if test -n "$NGX_FUZZER"; then
+    NGX_FUZZER_CONF_PATH="$NGX_CONF_PREFIX/nginx-fuzzer.conf"
+    cat << END                                                >> $NGX_MAKEFILE
+
+	test -f '\$(DESTDIR)$NGX_FUZZER_CONF_PATH' \\
+		|| cp conf/nginx-fuzzer.conf '\$(DESTDIR)$NGX_FUZZER_CONF_PATH'
+	cp conf/nginx-fuzzer.conf '\$(DESTDIR)$NGX_CONF_PREFIX/nginx-fuzzer.conf.default'
+END
+
+fi
+
+
 if test -n "$DYNAMIC_MODULES"; then
     cat << END                                                >> $NGX_MAKEFILE
 

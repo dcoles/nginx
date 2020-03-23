@@ -71,7 +71,9 @@ ngx_os_init(ngx_log_t *log)
     SOCKET        s;
     WSADATA       wsd;
     ngx_err_t     err;
+#if (NGX_FUZZER)
     ngx_time_t   *tp;
+#endif
     ngx_uint_t    n;
     SYSTEM_INFO   si;
 
@@ -272,8 +274,12 @@ nopoll:
         ngx_sprintf((u_char *) ngx_unique, "%P%Z", ngx_pid);
     }
 
+#if (NGX_FUZZER)
+    srand(0);
+#else
     tp = ngx_timeofday();
     srand((ngx_pid << 16) ^ (unsigned) tp->sec ^ tp->msec);
+#endif
 
     return NGX_OK;
 }

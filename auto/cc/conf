@@ -251,4 +251,26 @@ if [ "$NGX_PLATFORM" != win32 ]; then
 #    if [ $ngx_found = yes ]; then
 #    fi
 
+    if test -n "$NGX_FUZZER"; then
+        CC_TEST_FLAGS="$CC_TEST_FLAGS -fsanitize=fuzzer-no-link"
+
+        ngx_feature="LibFuzzer"
+        ngx_feature_name="NGX_FUZZER"
+        ngx_feature_run=no
+        ngx_feature_incs=
+        ngx_feature_path=
+        ngx_feature_libs=
+        ngx_feature_test=
+        . auto/feature
+
+        if [ $ngx_found = no ]; then
+            echo $0: error: -fsanitize=fuzzer not supported
+            echo
+            exit 1
+        fi
+
+        CFLAGS="${CFLAGS} -fsanitize=fuzzer-no-link"
+        MAIN_LINK="${MAIN_LINK} -fsanitize=fuzzer -pthread"
+    fi
+
 fi

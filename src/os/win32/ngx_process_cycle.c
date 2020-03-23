@@ -763,11 +763,17 @@ static ngx_thread_value_t __stdcall
 ngx_worker_thread(void *data)
 {
     ngx_int_t     n;
+#if !(NGX_FUZZER)
     ngx_time_t   *tp;
+#endif
     ngx_cycle_t  *cycle;
 
+#if (NGX_FUZZER)
+    srand(0);
+#else
     tp = ngx_timeofday();
     srand((ngx_pid << 16) ^ (unsigned) tp->sec ^ tp->msec);
+#endif
 
     cycle = (ngx_cycle_t *) ngx_cycle;
 

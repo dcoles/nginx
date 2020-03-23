@@ -782,7 +782,9 @@ ngx_worker_process_init(ngx_cycle_t *cycle, ngx_int_t worker)
 {
     sigset_t          set;
     ngx_int_t         n;
+#if !(NGX_FUZZER)
     ngx_time_t       *tp;
+#endif
     ngx_uint_t        i;
     ngx_cpuset_t     *cpu_affinity;
     struct rlimit     rlmt;
@@ -914,8 +916,12 @@ ngx_worker_process_init(ngx_cycle_t *cycle, ngx_int_t worker)
                       "sigprocmask() failed");
     }
 
+#if (NGX_FUZZER)
+    srandom(0);
+#else
     tp = ngx_timeofday();
     srandom(((unsigned) ngx_pid << 16) ^ tp->sec ^ tp->msec);
+#endif
 
     /*
      * disable deleting previous events for the listening sockets because

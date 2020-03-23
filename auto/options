@@ -16,6 +16,7 @@ NGX_LOCK_PATH=
 NGX_USER=
 NGX_GROUP=
 NGX_BUILD=
+NGX_FUZZER=
 
 CC=${CC:-cc}
 CPP=
@@ -211,6 +212,8 @@ do
             NGX_POST_CONF_MSG="$NGX_POST_CONF_MSG
 $0: warning: the \"--with-ipv6\" option is deprecated"
         ;;
+
+        --with-fuzzer)                   NGX_FUZZER=YES             ;;
 
         --without-http)                  HTTP=NO                    ;;
         --without-http-cache)            HTTP_CACHE=NO              ;;
@@ -436,6 +439,8 @@ cat << END
   --with-threads                     enable thread pool support
 
   --with-file-aio                    enable file AIO support
+
+  --with-fuzzer                      enable fuzzing support
 
   --with-http_ssl_module             enable ngx_http_ssl_module
   --with-http_v2_module              enable ngx_http_v2_module

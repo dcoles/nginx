@@ -34,7 +34,9 @@ ngx_os_io_t ngx_os_io = {
 ngx_int_t
 ngx_os_init(ngx_log_t *log)
 {
+#if !(NGX_FUZZER)
     ngx_time_t  *tp;
+#endif
     ngx_uint_t   n;
 #if (NGX_HAVE_LEVEL1_DCACHE_LINESIZE)
     long         size;
@@ -88,8 +90,12 @@ ngx_os_init(ngx_log_t *log)
     ngx_inherited_nonblocking = 0;
 #endif
 
+#if (NGX_FUZZER)
+    srandom(0);
+#else
     tp = ngx_timeofday();
     srandom(((unsigned) ngx_pid << 16) ^ tp->sec ^ tp->msec);
+#endif
 
     return NGX_OK;
 }
