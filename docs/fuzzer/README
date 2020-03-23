@@ -1,0 +1,30 @@
+Fuzzer support
+==============
+
+Nginx can be built as a libFuzzer[1] target using the `--with-fuzzer` configure
+flag. The resulting binary invokes libFuzzer and runs Nginx on a separate
+thread. Communication between threads occurs using a Unix domain socket
+(`nginx.sock`) created in the current working directory.
+
+At this time libFuzzer is only supported in Clang. You can explicitly specify
+Clang as your compiler using the `--with-cc=clang` configure flag.
+
+1. https://llvm.org/docs/LibFuzzer.html
+
+
+Usage
+-----
+
+```
+nginx [-dict=http.dict] CORPUS_DIR [SAMPLE_DIR]
+```
+
+The fuzzer will generate new interesting tests cases and place them in
+`CORPUS_DIR`. A `SAMPLE_DIR` can also be provided to seed the fuzzer with
+initial input.
+
+The fuzzer can also be run with a dictionary of common HTTP keywords and byte
+sequences. This will significantly improve the search speed. A sample dictionary
+is included in this directory.
+
+To see additional fuzzer options, run `nginx -help=1`.
